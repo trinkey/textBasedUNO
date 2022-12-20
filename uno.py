@@ -1,21 +1,7 @@
 from random import shuffle, choice
 
-deckAvailable = {
-    "total": 108,
-    "cards": [
-        "red 0", "red 1", "red 1", "red 2", "red 2", "red 3", "red 3", "red 4", "red 4", "red 5", "red 5", "red 6", "red 6", "red 7", "red 7", "red 8", "red 8", "red 9", "red 9", "red skip", "red skip", "red reverse ", "red reverse ", "red draw 2", "red draw 2",
-        "yellow 0", "yellow 1", "yellow 1", "yellow 2", "yellow 2", "yellow 3", "yellow 3", "yellow 4", "yellow 4", "yellow 5", "yellow 5", "yellow 6", "yellow 6", "yellow 7", "yellow 7", "yellow 8", "yellow 8", "yellow 9", "yellow 9", "yellow skip", "yellow skip", "yellow reverse", "yellow reverse", "yellow draw 2", "yellow draw 2",
-        "green 0", "green 1", "green 1", "green 2", "green 2", "green 3", "green 3", "green 4", "green 4", "green 5", "green 5", "green 6", "green 6", "green 7", "green 7", "green 8", "green 8", "green 9", "green 9", "green skip", "green skip", "green reverse", "green reverse", "green draw 2", "green draw 2",
-        "blue 0", "blue 1", "blue 1", "blue 2", "blue 2", "blue 3", "blue 3", "blue 4", "blue 4", "blue 5", "blue 5", "blue 6", "blue 6", "blue 7", "blue 7", "blue 8", "blue 8", "blue 9", "blue 9", "blue skip", "blue skip", "blue reverse", "blue reverse", "blue draw 2", "blue draw 2",
-        "any draw 4", "any draw 4", "any draw 4", "any draw 4", "any wild", "any wild", "any wild", "any wild"
-    ],
-    "colors": ("red", "yellow", "green", "blue")
-}
-shuffle(deckAvailable["cards"])
-
 autoReplenishDeck = True
 turn = 0 # 1 if whoStarts == "computer" else 0
-
 
 class Deck:
     def __init__(self): # Creates all variables needed.
@@ -23,9 +9,21 @@ class Deck:
         self.customColor = False
         self.playerDeck = []
         self.computerDeck = []
-    
+        
+        self.deckAvailable = { # Deck storage variable
+            "total": 108, # Total amount of cards left
+            "cards": [ # Cards left
+                "red 0", "red 1", "red 1", "red 2", "red 2", "red 3", "red 3", "red 4", "red 4", "red 5", "red 5", "red 6", "red 6", "red 7", "red 7", "red 8", "red 8", "red 9", "red 9", "red skip", "red skip", "red reverse ", "red reverse ", "red draw 2", "red draw 2",
+                "yellow 0", "yellow 1", "yellow 1", "yellow 2", "yellow 2", "yellow 3", "yellow 3", "yellow 4", "yellow 4", "yellow 5", "yellow 5", "yellow 6", "yellow 6", "yellow 7", "yellow 7", "yellow 8", "yellow 8", "yellow 9", "yellow 9", "yellow skip", "yellow skip", "yellow reverse", "yellow reverse", "yellow draw 2", "yellow draw 2",
+                "green 0", "green 1", "green 1", "green 2", "green 2", "green 3", "green 3", "green 4", "green 4", "green 5", "green 5", "green 6", "green 6", "green 7", "green 7", "green 8", "green 8", "green 9", "green 9", "green skip", "green skip", "green reverse", "green reverse", "green draw 2", "green draw 2",
+                "blue 0", "blue 1", "blue 1", "blue 2", "blue 2", "blue 3", "blue 3", "blue 4", "blue 4", "blue 5", "blue 5", "blue 6", "blue 6", "blue 7", "blue 7", "blue 8", "blue 8", "blue 9", "blue 9", "blue skip", "blue skip", "blue reverse", "blue reverse", "blue draw 2", "blue draw 2",
+                "any draw 4", "any draw 4", "any draw 4", "any draw 4", "any wild", "any wild", "any wild", "any wild"
+            ],
+            "colors": ("red", "yellow", "green", "blue") # Colors to use for wilds and draw 4s
+        }
+
     def setupNewGame(self, cards): # Setup game
-        deckAvailable = {
+        self.deckAvailable = { # Resets variable at start of game
             "total": 108,
             "cards": [
                 "red 0", "red 1", "red 1", "red 2", "red 2", "red 3", "red 3", "red 4", "red 4", "red 5", "red 5", "red 6", "red 6", "red 7", "red 7", "red 8", "red 8", "red 9", "red 9", "red skip", "red skip", "red reverse ", "red reverse ", "red draw 2", "red draw 2",
@@ -36,12 +34,12 @@ class Deck:
             ],
             "colors": ("red", "yellow", "green", "blue")
         }
-        shuffle(deckAvailable["cards"])
+        shuffle(self.deckAvailable["cards"]) # Shuffles the deck
         
         self.currentCard = self.drawCard()
         
         if self.currentCard.split(" ")[0] == "any":
-            self.customColor = choice(deckAvailable["colors"])
+            self.customColor = choice(self.deckAvailable["colors"])
         else:
             self.customColor = False
         
@@ -49,9 +47,9 @@ class Deck:
         self.computerDeck = self.getNewDeck(7)[0]
     
     def insertIntoDeck(self, card): # Inserts a card into the deck and shuffles it.
-        deckAvailable["cards"].append(card)
-        deckAvailable["total"] += 1
-        shuffle(deckAvailable["cards"])
+        self.deckAvailable["cards"].append(card)
+        self.deckAvailable["total"] += 1
+        shuffle(self.deckAvailable["cards"])
     
     def playCard(self, newCard, turn, replenishDeck = True): # Plays a card on the deck.
                                                              # Handles color changes if needed.
@@ -65,27 +63,27 @@ class Deck:
             if turn == 0:
                 while newColor not in ["1", "2", "3", "4"]:
                     newColor = input("Enter a number, 1-4, of which color you want to make it.\n(1 = red, 2 = yellow, 3 = green, 4 = blue)\n")
-                self.customColor = deckAvailable["colors"][int(newColor) - 1]
+                self.customColor = self.deckAvailable["colors"][int(newColor) - 1]
             else:
-                self.customColor = choice(deckAvailable["colors"])
+                self.customColor = choice(self.deckAvailable["colors"])
     
     def getNewDeck(self, amount): # Returns a new deck with x amount of cards
-        shuffle(deckAvailable["cards"])
+        shuffle(self.deckAvailable["cards"])
         newDeck = []
         for i in range(amount):
-            if deckAvailable["total"]:
-                newDeck.append(deckAvailable["cards"][0])
-                deckAvailable["cards"].pop(0)
-                deckAvailable["total"] -= 1
+            if self.deckAvailable["total"]:
+                newDeck.append(self.deckAvailable["cards"][0])
+                self.deckAvailable["cards"].pop(0)
+                self.deckAvailable["total"] -= 1
             else:
                 return [newDeck, i]
         return [newDeck, amount]
     
     def drawCard(self): # Takes a card out of the deck and returns it.
-        if deckAvailable["total"]:
-            deckAvailable["total"] -= 1
-            out = deckAvailable["cards"][0]
-            deckAvailable["cards"].pop(0)
+        if self.deckAvailable["total"]:
+            self.deckAvailable["total"] -= 1
+            out = self.deckAvailable["cards"][0]
+            self.deckAvailable["cards"].pop(0)
             return out
         return False
     
@@ -123,7 +121,7 @@ class Deck:
                                       # to check if any particular team should draw cards
                                       # or get their turn skipped.
             
-            if deckAvailable["total"]: # Makes sure there are cards left in the deck to draw from
+            if self.deckAvailable["total"]: # Makes sure there are cards left in the deck to draw from
                 while not turn: # This loop makes it so that if the player inputs a bad input,
                                 # it stays their turn until they input a valid number.
                     try:
@@ -164,7 +162,7 @@ class Deck:
             
             checkIfTeamModify = False # Reset variable
             
-            if deckAvailable["total"]: # Makes sure there are cards left in the deck to draw from
+            if self.deckAvailable["total"]: # Makes sure there are cards left in the deck to draw from
                 for i in range(len(self.computerDeck)): # Checks if any of the comptuters cards
                                                         # are valid, and plays it if so
                     if turn == 1 and self.checkIfValidPlay(self.computerDeck[i]):
