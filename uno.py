@@ -36,30 +36,33 @@ class Deck:
         }
         shuffle(self.deckAvailable["cards"]) # Shuffles the deck
         
-        self.currentCard = self.drawCard()
+        self.currentCard = self.drawCard() # Sets the first card on the deck at the start of the game
         
-        if self.currentCard.split(" ")[0] == "any":
+        if self.currentCard.split(" ")[0] == "any": # If its a wild or draw 4, it chooses a random color
             self.customColor = choice(self.deckAvailable["colors"])
-        else:
+        else: # If its not, the custom color is set to False
             self.customColor = False
         
+        # Generates the deck of cards for both players
         self.playerDeck = self.getNewDeck(7)[0]
         self.computerDeck = self.getNewDeck(7)[0]
     
     def insertIntoDeck(self, card): # Inserts a card into the deck and shuffles it.
-        self.deckAvailable["cards"].append(card)
-        self.deckAvailable["total"] += 1
-        shuffle(self.deckAvailable["cards"])
+        self.deckAvailable["cards"].append(card) # Appends card to deck
+        self.deckAvailable["total"] += 1         # Adds one to total in deck
+        shuffle(self.deckAvailable["cards"])     # Shuffles deck
     
     def playCard(self, newCard, turn, replenishDeck = True): # Plays a card on the deck.
                                                              # Handles color changes if needed.
-        if self.customColor:
+        if self.customColor: # If there is a custom color set, it gets reset
             self.customColor = False
-        if replenishDeck:
+        
+        if replenishDeck: # If replenishDeck is True, it will insert the old card back into the deck
             self.insertIntoDeck(self.currentCard)
-        self.currentCard = newCard
-        newColor = False
-        if self.currentCard.split(" ")[0] == "any":
+        
+        self.currentCard = newCard # Updates current card
+        
+        if self.currentCard.split(" ")[0] == "any": # If its a draw 4 or wild, chooose a sub-color
             if turn == 0:
                 while newColor not in ["1", "2", "3", "4"]:
                     newColor = input("Enter a number, 1-4, of which color you want to make it.\n(1 = red, 2 = yellow, 3 = green, 4 = blue)\n")
