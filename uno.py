@@ -1,5 +1,18 @@
 from random import shuffle, choice
 
+deckAvailable = {
+    "total": 108,
+    "cards": [
+        "red 0", "red 1", "red 1", "red 2", "red 2", "red 3", "red 3", "red 4", "red 4", "red 5", "red 5", "red 6", "red 6", "red 7", "red 7", "red 8", "red 8", "red 9", "red 9", "red skip", "red skip", "red reverse ", "red reverse ", "red draw 2", "red draw 2",
+        "yellow 0", "yellow 1", "yellow 1", "yellow 2", "yellow 2", "yellow 3", "yellow 3", "yellow 4", "yellow 4", "yellow 5", "yellow 5", "yellow 6", "yellow 6", "yellow 7", "yellow 7", "yellow 8", "yellow 8", "yellow 9", "yellow 9", "yellow skip", "yellow skip", "yellow reverse", "yellow reverse", "yellow draw 2", "yellow draw 2",
+        "green 0", "green 1", "green 1", "green 2", "green 2", "green 3", "green 3", "green 4", "green 4", "green 5", "green 5", "green 6", "green 6", "green 7", "green 7", "green 8", "green 8", "green 9", "green 9", "green skip", "green skip", "green reverse", "green reverse", "green draw 2", "green draw 2",
+        "blue 0", "blue 1", "blue 1", "blue 2", "blue 2", "blue 3", "blue 3", "blue 4", "blue 4", "blue 5", "blue 5", "blue 6", "blue 6", "blue 7", "blue 7", "blue 8", "blue 8", "blue 9", "blue 9", "blue skip", "blue skip", "blue reverse", "blue reverse", "blue draw 2", "blue draw 2",
+        "any draw 4", "any draw 4", "any draw 4", "any draw 4", "any wild", "any wild", "any wild", "any wild"
+    ],
+    "colors": ("red", "yellow", "green", "blue")
+}
+shuffle(deckAvailable["cards"])
+
 autoReplenishDeck = True
 turn = 0 # 1 if whoStarts == "computer" else 0
 
