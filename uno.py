@@ -54,6 +54,8 @@ class Deck:
     
     def playCard(self, newCard, turn, replenishDeck = True): # Plays a card on the deck.
                                                              # Handles color changes if needed.
+        newColor = ""
+        
         if self.customColor: # If there is a custom color set, it gets reset
             self.customColor = False
         
@@ -61,7 +63,6 @@ class Deck:
             self.insertIntoDeck(self.currentCard)
         
         self.currentCard = newCard # Updates current card
-        
         if self.currentCard.split(" ")[0] == "any": # If its a draw 4 or wild, chooose a sub-color
             if turn == 0:
                 while newColor not in ["1", "2", "3", "4"]:
