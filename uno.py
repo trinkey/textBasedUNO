@@ -1,5 +1,7 @@
 from random import shuffle, choice
 
+playerStartAmount = 7
+computerStartAmount = 7
 autoReplenishDeck = True
 turn = 0 # 1 if whoStarts == "computer" else 0
 
@@ -22,7 +24,7 @@ class Deck:
             "colors": ("red", "yellow", "green", "blue") # Colors to use for wilds and draw 4s
         }
 
-    def setupNewGame(self, cards): # Setup game
+    def setupNewGame(self, playerCards, computerCards): # Setup game
         self.deckAvailable = { # Resets variable at start of game
             "total": 108,
             "cards": [
@@ -44,8 +46,8 @@ class Deck:
             self.customColor = False
         
         # Generates the deck of cards for both players
-        self.playerDeck = self.getNewDeck(7)[0]
-        self.computerDeck = self.getNewDeck(7)[0]
+        self.playerDeck = self.getNewDeck(playerCards)[0]
+        self.computerDeck = self.getNewDeck(computerCards)[0]
     
     def insertIntoDeck(self, card): # Inserts a card into the deck and shuffles it.
         self.deckAvailable["cards"].append(card) # Appends card to deck
@@ -113,10 +115,10 @@ class Deck:
         else:
             return [turn, 0]
     
-    def startGame(self, turn, replenishDeck): # Controls the entire game. Call this function
+    def startGame(self, turn, replenishDeck, playerStart, computerStart): # Controls the entire game. Call this function
                                                    # after you define the variable.
         
-        self.setupNewGame(7)
+        self.setupNewGame(playerStart, computerStart)
         
         self.updateVisibleDeck() # Draws the deck when the game starts
         
@@ -198,12 +200,14 @@ class Deck:
                         self.computerDeck.append(self.drawCard())
                 self.updateVisibleDeck()
                 turn = teamModifier[0]
+                if turn == 1:
+                  input("Press enter to continue...\n")
     
     def checkIfWin(self): # Checks if someone has won.
         return True if not len(self.playerDeck) or not len(self.computerDeck) else False
 
 deck = Deck()
 
-deck.startGame(turn, autoReplenishDeck)
+deck.startGame(turn, autoReplenishDeck, playerStartAmount, computerStartAmount)
 
 input("Press enter to close.\n")
