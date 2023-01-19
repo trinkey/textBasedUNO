@@ -2,7 +2,7 @@ from random import shuffle, choice
 from turtle import Screen, Turtle
 
 useGraphics = True
-playerStartAmount = 20
+playerStartAmount = 7
 computerStartAmount = 7
 autoReplenishDeck = True
 turn = 0 # 1 if whoStarts == "computer" else 0
