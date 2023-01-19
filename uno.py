@@ -33,8 +33,8 @@ if useGraphics:
             self.turtle.speed(0)
             self.deck = deckObject
 
-            self.gotoNewLocation(posx, posy)
-            self.updateImage(image)
+            self.gotoNewLocation(posx, posy) # Sets location
+            self.updateImage(image) # Changes texture
 
         def gotoNewLocation(self, posx, posy):
             self.turtle.goto(posx, posy)
@@ -55,7 +55,7 @@ class Deck:
         self.computerDeck = []
         self.deckAvailable = {}
         
-        if self.useGraphics:
+        if self.useGraphics: # Sets up graphics if its enabled
             self.cardsOnScreen = []
             self.screen = Screen()
             self.screen.setup(1024, 576)
@@ -63,12 +63,13 @@ class Deck:
             self.screen.bgcolor("#443344")
             
             for o in range(2):
-                for i in range(107):
+                for i in range(107): # Possible places for cards to be. I'm doing it this way because the other way I had in mind ate up like a lot of ram
                     self.cardsOnScreen.append(Card(self, "blank", 55 * (i % 18) - 485, 0 - (80 * (i // 18) - 248) if o == 1 else 95 * (i // 18) - 240))
             
-            for i in images:
+            for i in images: # Load image files
                 self.screen.addshape("unoSprites/" + i)
             
+            # Object used for writing the numbers
             self.numberer = Turtle()
             self.numberer.pu()
             self.numberer.ht()
@@ -176,6 +177,7 @@ class Deck:
             for i in range(len(self.computerDeck)): # Render the computer's cards
                 self.cardsOnScreen[i + 107].updateImage("uno back")
             
+            # Changes background color for draw 4s and wilds so you know what color to play
             if self.customColor == "red":
                 self.screen.bgcolor("#553333")
             elif self.customColor == "yellow":
