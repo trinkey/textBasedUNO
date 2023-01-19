@@ -1,5 +1,4 @@
 from random import shuffle, choice
-from turtle import Screen, Turtle
 
 useGraphics = True
 playerStartAmount = 7
