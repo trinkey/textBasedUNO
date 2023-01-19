@@ -1,34 +1,79 @@
 from random import shuffle, choice
+from turtle import Screen, Turtle
 
+useGraphics = False
 playerStartAmount = 7
 computerStartAmount = 7
 autoReplenishDeck = True
 turn = 0 # 1 if whoStarts == "computer" else 0
 
+if useGraphics:
+    from turtle import Screen, Turtle
+    images = [ # Images used for sprites
+        "red 0.gif", "red 1.gif", "red 2.gif", "red 3.gif", "red 4.gif", "red 5.gif", "red 6.gif", "red 7.gif", "red 8.gif", "red 9.gif", "red skip.gif", "red reverse.gif", "red draw 2.gif",
+        "yellow 0.gif", "yellow 1.gif", "yellow 2.gif", "yellow 3.gif", "yellow 4.gif", "yellow 5.gif", "yellow 6.gif", "yellow 7.gif", "yellow 8.gif", "yellow 9.gif", "yellow skip.gif", "yellow reverse.gif", "yellow draw 2.gif",
+        "green 0.gif", "green 1.gif", "green 2.gif", "green 3.gif", "green 4.gif", "green 5.gif", "green 6.gif", "green 7.gif", "green 8.gif", "green 9.gif", "green skip.gif", "green reverse.gif", "green draw 2.gif",
+        "blue 0.gif", "blue 1.gif", "blue 2.gif", "blue 3.gif", "blue 4.gif", "blue 5.gif", "blue 6.gif", "blue 7.gif", "blue 8.gif", "blue 9.gif", "blue skip.gif", "blue reverse.gif", "blue draw 2.gif",
+        "any draw 4.gif", "any wild.gif", "uno back.gif"
+    ]
+
+    class Card:
+        def __init__(self, image = "uno back", posx = 0, posy = 0):
+            self.turtle = Turtle()
+            self.turtle.pu()
+            self.turtle.speed(0)
+            self.gotoNewLocation(posx, posy)
+            self.updateImage(image)
+            self.turtle.lt(90)
+        
+        def gotoNewLocation(self, posx, posy):
+            self.turtle.goto(posx, posy)
+        
+        def updateImage(self, image = "uno back"):
+            if image == "blank":
+                self.turtle.ht()
+            else:
+                self.turtle.st()
+                self.turtle.shape(image + ".gif") # Updates visible image
+
 class Deck:
-    def __init__(self): # Creates all variables needed.
+    def __init__(self, ug): # Creates all variables needed.
+        self.useGraphics = ug
         self.currentCard = ""
         self.customColor = False
         self.playerDeck = []
         self.computerDeck = []
+        self.deckAvailable = {}
         
-        self.deckAvailable = { # Deck storage variable
-            "total": 108, # Total amount of cards left
-            "cards": [ # Cards left
-                "red 0", "red 1", "red 1", "red 2", "red 2", "red 3", "red 3", "red 4", "red 4", "red 5", "red 5", "red 6", "red 6", "red 7", "red 7", "red 8", "red 8", "red 9", "red 9", "red skip", "red skip", "red reverse ", "red reverse ", "red draw 2", "red draw 2",
-                "yellow 0", "yellow 1", "yellow 1", "yellow 2", "yellow 2", "yellow 3", "yellow 3", "yellow 4", "yellow 4", "yellow 5", "yellow 5", "yellow 6", "yellow 6", "yellow 7", "yellow 7", "yellow 8", "yellow 8", "yellow 9", "yellow 9", "yellow skip", "yellow skip", "yellow reverse", "yellow reverse", "yellow draw 2", "yellow draw 2",
-                "green 0", "green 1", "green 1", "green 2", "green 2", "green 3", "green 3", "green 4", "green 4", "green 5", "green 5", "green 6", "green 6", "green 7", "green 7", "green 8", "green 8", "green 9", "green 9", "green skip", "green skip", "green reverse", "green reverse", "green draw 2", "green draw 2",
-                "blue 0", "blue 1", "blue 1", "blue 2", "blue 2", "blue 3", "blue 3", "blue 4", "blue 4", "blue 5", "blue 5", "blue 6", "blue 6", "blue 7", "blue 7", "blue 8", "blue 8", "blue 9", "blue 9", "blue skip", "blue skip", "blue reverse", "blue reverse", "blue draw 2", "blue draw 2",
-                "any draw 4", "any draw 4", "any draw 4", "any draw 4", "any wild", "any wild", "any wild", "any wild"
-            ],
-            "colors": ("red", "yellow", "green", "blue") # Colors to use for wilds and draw 4s
-        }
-
+        if self.useGraphics:
+            self.cardsOnScreen = []
+            self.screen = Screen()
+            self.screen.setup(1024, 576)
+            self.screen.tracer(0)
+            self.screen.bgcolor("#443344")
+            
+            for o in range(2):
+                for i in range(107):
+                    self.cardsOnScreen.append(Card("blank", 55 * (i % 18) - 485, 0 - (80 * (i // 18) - 248)if o == 1 else 95 * (i // 18) - 248))
+            
+            for i in images:
+                self.screen.addshape(i)
+            
+            self.numberer = Turtle()
+            self.numberer.pu()
+            self.numberer.ht()
+            self.numberer.color("white")
+            
+            self.test = Card("red 0", 30, 0)
+            self.te2t = Card("uno back", -30, 0)
+            
+            self.screen.update()
+    
     def setupNewGame(self, playerCards, computerCards): # Setup game
         self.deckAvailable = { # Resets variable at start of game
             "total": 108,
             "cards": [
-                "red 0", "red 1", "red 1", "red 2", "red 2", "red 3", "red 3", "red 4", "red 4", "red 5", "red 5", "red 6", "red 6", "red 7", "red 7", "red 8", "red 8", "red 9", "red 9", "red skip", "red skip", "red reverse ", "red reverse ", "red draw 2", "red draw 2",
+                "red 0", "red 1", "red 1", "red 2", "red 2", "red 3", "red 3", "red 4", "red 4", "red 5", "red 5", "red 6", "red 6", "red 7", "red 7", "red 8", "red 8", "red 9", "red 9", "red skip", "red skip", "red reverse", "red reverse", "red draw 2", "red draw 2",
                 "yellow 0", "yellow 1", "yellow 1", "yellow 2", "yellow 2", "yellow 3", "yellow 3", "yellow 4", "yellow 4", "yellow 5", "yellow 5", "yellow 6", "yellow 6", "yellow 7", "yellow 7", "yellow 8", "yellow 8", "yellow 9", "yellow 9", "yellow skip", "yellow skip", "yellow reverse", "yellow reverse", "yellow draw 2", "yellow draw 2",
                 "green 0", "green 1", "green 1", "green 2", "green 2", "green 3", "green 3", "green 4", "green 4", "green 5", "green 5", "green 6", "green 6", "green 7", "green 7", "green 8", "green 8", "green 9", "green 9", "green skip", "green skip", "green reverse", "green reverse", "green draw 2", "green draw 2",
                 "blue 0", "blue 1", "blue 1", "blue 2", "blue 2", "blue 3", "blue 3", "blue 4", "blue 4", "blue 5", "blue 5", "blue 6", "blue 6", "blue 7", "blue 7", "blue 8", "blue 8", "blue 9", "blue 9", "blue skip", "blue skip", "blue reverse", "blue reverse", "blue draw 2", "blue draw 2",
@@ -104,9 +149,27 @@ class Deck:
             out += str(i + 1) + ": " + deck[i].replace("any ", "") + "\n"
         return out[:-1]
     
-    def updateVisibleDeck(self): # Prints out the deck and your cards
-        print("\n\nComputer's cards: " + str(len(self.computerDeck)) + ("\nUNO!!!!!" if len(self.computerDeck) == 1 else "") + "\n\n+---+ +" + "-" * len(self.currentCard.replace("any ", "")) + "+\n|UNO| |" + self.currentCard.replace("any ", "") + "|\n+---+ +" + "-" * len(self.currentCard.replace("any ", "")) + "+" + ("\n\nColor: " + self.customColor if self.customColor else "") + "\n\nYour cards:\n" + self.handIntoString(self.playerDeck))
-    
+    def updateVisibleDeck(self): # Prints/displays the deck and both the computer's and player's cards
+        if self.useGraphics: # Makes the screen update if graphics are on
+            self.test.updateImage(self.currentCard)
+            
+            self.numberer.clear()
+            
+            for i in self.cardsOnScreen:
+                i.updateImage("blank")
+            
+            for i in range(len(self.playerDeck)): # Render the player's cards on screen
+                self.cardsOnScreen[i].updateImage(self.playerDeck[i])
+                self.numberer.goto(55 * (i % 18) - 485, 95 * (i // 18) - 208)
+                self.numberer.write(str(i + 1), False, "center", ("Arial", 12, "normal"))
+            
+            for i in range(len(self.computerDeck)): # Render the computer's cards
+                self.cardsOnScreen[i + 107].updateImage("uno back")
+            
+            self.screen.update() # Update the display
+        else: # This print statement prints the deck and stuff
+            print("\n\nComputer's cards: " + str(len(self.computerDeck)) + ("\nUNO!!!!!" if len(self.computerDeck) == 1 else "") + "\n\n+---+ +" + "-" * len(self.currentCard.replace("any ", "")) + "+\n|UNO| |" + self.currentCard.replace("any ", "") + "|\n+---+ +" + "-" * len(self.currentCard.replace("any ", "")) + "+" + ("\n\nColor: " + self.customColor if self.customColor else "") + "\n\nYour cards:\n" + self.handIntoString(self.playerDeck))
+  
     def changeTeamAgain(self, card, turn): # Handles draw 2/4 cards and skips
         if card.split(" ")[1] == "draw":
             return [(turn + 1) % 2, int(card.split(" ")[2])]
@@ -117,7 +180,6 @@ class Deck:
     
     def startGame(self, turn, replenishDeck, playerStart, computerStart): # Controls the entire game. Call this function
                                                    # after you define the variable.
-        
         self.setupNewGame(playerStart, computerStart)
         
         self.updateVisibleDeck() # Draws the deck when the game starts
@@ -206,7 +268,7 @@ class Deck:
     def checkIfWin(self): # Checks if someone has won.
         return True if not len(self.playerDeck) or not len(self.computerDeck) else False
 
-deck = Deck()
+deck = Deck(useGraphics)
 
 deck.startGame(turn, autoReplenishDeck, playerStartAmount, computerStartAmount)
 
