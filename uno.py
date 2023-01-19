@@ -1,8 +1,8 @@
 from random import shuffle, choice
 from turtle import Screen, Turtle
 
-useGraphics = False
-playerStartAmount = 7
+useGraphics = True
+playerStartAmount = 20
 computerStartAmount = 7
 autoReplenishDeck = True
 turn = 0 # 1 if whoStarts == "computer" else 0
@@ -18,16 +18,27 @@ if useGraphics:
     ]
 
     class Card:
-        def __init__(self, image = "uno back", posx = 0, posy = 0):
+        def __init__(self, deckObject, image = "blank", posx = 0, posy = 0): # Takes 1 required arguments, 3 optional arguments
+            # deckObject -> class
+            # this should be a Deck() class. This is used to send the registered clicks to the deck.
+            
+            # image -> str
+            # sets the image to use
+
+            # posx -> int, float
+            # posy -> int, float
+            # sets x and y coordinates
             self.turtle = Turtle()
             self.turtle.pu()
             self.turtle.speed(0)
+            self.deck = deckObject
+
             self.gotoNewLocation(posx, posy)
             self.updateImage(image)
-        
+
         def gotoNewLocation(self, posx, posy):
             self.turtle.goto(posx, posy)
-        
+
         def updateImage(self, image = "uno back"):
             if image == "blank":
                 self.turtle.ht()
@@ -53,7 +64,7 @@ class Deck:
             
             for o in range(2):
                 for i in range(107):
-                    self.cardsOnScreen.append(Card("blank", 55 * (i % 18) - 485, 0 - (80 * (i // 18) - 248)if o == 1 else 95 * (i // 18) - 248))
+                    self.cardsOnScreen.append(Card(self, "blank", 55 * (i % 18) - 485, 0 - (80 * (i // 18) - 248) if o == 1 else 95 * (i // 18) - 240))
             
             for i in images:
                 self.screen.addshape("unoSprites/" + i)
@@ -63,8 +74,8 @@ class Deck:
             self.numberer.ht()
             self.numberer.color("white")
             
-            self.test = Card("red 0", 30, 0)
-            self.te2t = Card("uno back", -30, 0)
+            self.test = Card(self, "blank", 30, 0)
+            self.te2t = Card(self, "uno back", -30, 0)
             
             self.screen.update()
     
@@ -159,11 +170,22 @@ class Deck:
             
             for i in range(len(self.playerDeck)): # Render the player's cards on screen
                 self.cardsOnScreen[i].updateImage(self.playerDeck[i])
-                self.numberer.goto(55 * (i % 18) - 485, 95 * (i // 18) - 208)
+                self.numberer.goto(55 * (i % 18) - 485, 95 * (i // 18) - 203)
                 self.numberer.write(str(i + 1), False, "center", ("Arial", 12, "normal"))
             
             for i in range(len(self.computerDeck)): # Render the computer's cards
                 self.cardsOnScreen[i + 107].updateImage("uno back")
+            
+            if self.customColor == "red":
+                self.screen.bgcolor("#553333")
+            elif self.customColor == "yellow":
+                self.screen.bgcolor("#555533")
+            elif self.customColor == "green":
+                self.screen.bgcolor("#335533")
+            elif self.customColor == "blue":
+                self.screen.bgcolor("#333355")
+            else:
+                self.screen.bgcolor("#443344")
             
             self.screen.update() # Update the display
         else: # This print statement prints the deck and stuff
@@ -192,7 +214,7 @@ class Deck:
                 while not turn: # This loop makes it so that if the player inputs a bad input,
                                 # it stays their turn until they input a valid number.
                     try:
-                        card = int(input("Enter which card you want to play! (0 to draw)")) - 1
+                        card = int(input("Enter which card you want to play! (0 to draw)\n")) - 1
                         if card == -1: # If input is 0, draw card
                             self.playerDeck.append(self.drawCard())
                             turn = 1
