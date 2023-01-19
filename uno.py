@@ -24,7 +24,6 @@ if useGraphics:
             self.turtle.speed(0)
             self.gotoNewLocation(posx, posy)
             self.updateImage(image)
-            self.turtle.lt(90)
         
         def gotoNewLocation(self, posx, posy):
             self.turtle.goto(posx, posy)
