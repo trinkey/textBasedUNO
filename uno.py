@@ -56,7 +56,7 @@ class Deck:
                     self.cardsOnScreen.append(Card("blank", 55 * (i % 18) - 485, 0 - (80 * (i // 18) - 248)if o == 1 else 95 * (i // 18) - 248))
             
             for i in images:
-                self.screen.addshape(i)
+                self.screen.addshape("unoSprites/" + i)
             
             self.numberer = Turtle()
             self.numberer.pu()
