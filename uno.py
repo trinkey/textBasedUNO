@@ -34,7 +34,7 @@ if useGraphics:
                 self.turtle.ht()
             else:
                 self.turtle.st()
-                self.turtle.shape(image + ".gif") # Updates visible image
+                self.turtle.shape("unoSprites/" + image + ".gif") # Updates visible image
 
 class Deck:
     def __init__(self, ug): # Creates all variables needed.
