@@ -1,3 +1,6 @@
+# Scuffed online version:
+# https://trinkey.trinket.io/sites/uno
+
 from random import shuffle, choice
 
 useGraphics = True
