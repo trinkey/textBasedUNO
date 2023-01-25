@@ -92,7 +92,6 @@ class Deck:
             ],
             "colors": ("red", "yellow", "green", "blue")
         }
-        conputerDeck = ["any wild", "any wild", "any wild", "blue 1", "green 4"]
         shuffle(self.deckAvailable["cards"]) # Shuffles the deck
         
         self.currentCard = self.drawCard() # Sets the first card on the deck at the start of the game
