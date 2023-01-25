@@ -7,7 +7,7 @@ useGraphics = True
 playerStartAmount = 7
 computerStartAmount = 7
 autoReplenishDeck = True
-turn = 0 # 1 if whoStarts == "computer" else 0q
+turn = 0 # 1 if whoStarts == "computer" else 0
 
 class Deck:
     def __init__(self, ug): # Creates all variables needed.
