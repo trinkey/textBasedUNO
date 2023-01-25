@@ -7,7 +7,7 @@ useGraphics = True
 playerStartAmount = 7
 computerStartAmount = 7
 autoReplenishDeck = True
-turn = 0 # 1 if whoStarts == "computer" else 0
+turn = 0 # 1 if whoStarts == "computer" else 0q
 
 class Deck:
     def __init__(self, ug): # Creates all variables needed.
@@ -75,8 +75,8 @@ class Deck:
             self.numberer.ht()
             self.numberer.color("white")
             
-            self.test = Card(self, "blank", 30, 0)
-            self.te2t = Card(self, "uno back", -30, 0)
+            self.deckDisplay = Card(self, "blank", 30, 0)
+            self.deckBackDisplay = Card(self, "uno back", -30, 0)
             
             self.screen.update()
     
@@ -170,7 +170,7 @@ class Deck:
     
     def updateVisibleDeck(self): # Prints/displays the deck and both the computer's and player's cards
         if self.useGraphics: # Makes the screen update if graphics are on
-            self.test.updateImage(self.currentCard)
+            self.deckDisplay.updateImage(self.currentCard)
             
             self.numberer.clear()
             
@@ -181,6 +181,8 @@ class Deck:
                 self.cardsOnScreen[i].updateImage(self.playerDeck[i])
                 self.numberer.goto(55 * (i % 18) - 485, 95 * (i // 18) - 203)
                 self.numberer.write(str(i + 1), False, "center", ("Arial", 12, "normal"))
+            self.numberer.goto(-30, 35)
+            self.numberer.write(str(self.deckAvailable["total"]), False, "center", ("Arial", 12, "normal"))
             
             for i in range(len(self.computerDeck)): # Render the computer's cards
                 self.cardsOnScreen[i + 107].updateImage("uno back")
