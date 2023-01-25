@@ -1,5 +1,5 @@
-# Scuffed online version:
-# https://trinkey.trinket.io/sites/uno
+# Todo - add an option to try to play a drawed card the turn you draw it
+# Bugs - none known
 
 from random import shuffle, choice
 
@@ -9,47 +9,46 @@ computerStartAmount = 7
 autoReplenishDeck = True
 turn = 0 # 1 if whoStarts == "computer" else 0
 
-if useGraphics:
-    from turtle import Screen, Turtle
-    images = [ # Images used for sprites
-        "red 0.gif", "red 1.gif", "red 2.gif", "red 3.gif", "red 4.gif", "red 5.gif", "red 6.gif", "red 7.gif", "red 8.gif", "red 9.gif", "red skip.gif", "red reverse.gif", "red draw 2.gif",
-        "yellow 0.gif", "yellow 1.gif", "yellow 2.gif", "yellow 3.gif", "yellow 4.gif", "yellow 5.gif", "yellow 6.gif", "yellow 7.gif", "yellow 8.gif", "yellow 9.gif", "yellow skip.gif", "yellow reverse.gif", "yellow draw 2.gif",
-        "green 0.gif", "green 1.gif", "green 2.gif", "green 3.gif", "green 4.gif", "green 5.gif", "green 6.gif", "green 7.gif", "green 8.gif", "green 9.gif", "green skip.gif", "green reverse.gif", "green draw 2.gif",
-        "blue 0.gif", "blue 1.gif", "blue 2.gif", "blue 3.gif", "blue 4.gif", "blue 5.gif", "blue 6.gif", "blue 7.gif", "blue 8.gif", "blue 9.gif", "blue skip.gif", "blue reverse.gif", "blue draw 2.gif",
-        "any draw 4.gif", "any wild.gif", "uno back.gif"
-    ]
-
-    class Card:
-        def __init__(self, deckObject, image = "blank", posx = 0, posy = 0): # Takes 1 required arguments, 3 optional arguments
-            # deckObject -> class
-            # this should be a Deck() class. This is used to send the registered clicks to the deck.
-            
-            # image -> str
-            # sets the image to use
-
-            # posx -> int, float
-            # posy -> int, float
-            # sets x and y coordinates
-            self.turtle = Turtle()
-            self.turtle.pu()
-            self.turtle.speed(0)
-            self.deck = deckObject
-
-            self.gotoNewLocation(posx, posy) # Sets location
-            self.updateImage(image) # Changes texture
-
-        def gotoNewLocation(self, posx, posy):
-            self.turtle.goto(posx, posy)
-
-        def updateImage(self, image = "uno back"):
-            if image == "blank":
-                self.turtle.ht()
-            else:
-                self.turtle.st()
-                self.turtle.shape("unoSprites/" + image + ".gif") # Updates visible image
-
 class Deck:
     def __init__(self, ug): # Creates all variables needed.
+        if ug:
+            from turtle import Screen, Turtle
+            class Card:
+                def __init__(self, deckObject, image = "blank", posx = 0, posy = 0): # Takes 1 required arguments, 3 optional arguments
+                    # deckObject -> class
+                    # this should be a Deck() class. This is used to send the registered clicks to the deck.
+                    
+                    # image -> str
+                    # sets the image to use
+
+                    # posx -> int, float
+                    # posy -> int, float
+                    # sets x and y coordinates
+                    self.turtle = Turtle()
+                    self.turtle.pu()
+                    self.turtle.speed(0)
+                    self.deck = deckObject
+
+                    self.gotoNewLocation(posx, posy)
+                    self.updateImage(image)
+
+                def gotoNewLocation(self, posx, posy):
+                    self.turtle.goto(posx, posy)
+
+                def updateImage(self, image = "uno back"):
+                    if image == "blank":
+                        self.turtle.ht()
+                    else:
+                        self.turtle.st()
+                        self.turtle.shape("unoSprites/" + image + ".gif") # Updates visible image
+        
+        images = [ # Images used for sprites
+            "red 0.gif", "red 1.gif", "red 2.gif", "red 3.gif", "red 4.gif", "red 5.gif", "red 6.gif", "red 7.gif", "red 8.gif", "red 9.gif", "red skip.gif", "red reverse.gif", "red draw 2.gif",
+            "yellow 0.gif", "yellow 1.gif", "yellow 2.gif", "yellow 3.gif", "yellow 4.gif", "yellow 5.gif", "yellow 6.gif", "yellow 7.gif", "yellow 8.gif", "yellow 9.gif", "yellow skip.gif", "yellow reverse.gif", "yellow draw 2.gif",
+            "green 0.gif", "green 1.gif", "green 2.gif", "green 3.gif", "green 4.gif", "green 5.gif", "green 6.gif", "green 7.gif", "green 8.gif", "green 9.gif", "green skip.gif", "green reverse.gif", "green draw 2.gif",
+            "blue 0.gif", "blue 1.gif", "blue 2.gif", "blue 3.gif", "blue 4.gif", "blue 5.gif", "blue 6.gif", "blue 7.gif", "blue 8.gif", "blue 9.gif", "blue skip.gif", "blue reverse.gif", "blue draw 2.gif",
+            "any draw 4.gif", "any wild.gif", "uno back.gif"
+        ]
         self.useGraphics = ug
         self.currentCard = ""
         self.customColor = False
@@ -57,7 +56,7 @@ class Deck:
         self.computerDeck = []
         self.deckAvailable = {}
         
-        if self.useGraphics: # Sets up graphics if its enabled
+        if self.useGraphics:
             self.cardsOnScreen = []
             self.screen = Screen()
             self.screen.setup(1024, 576)
@@ -65,13 +64,12 @@ class Deck:
             self.screen.bgcolor("#443344")
             
             for o in range(2):
-                for i in range(107): # Possible places for cards to be. I'm doing it this way because the other way I had in mind ate up like a lot of ram
+                for i in range(107):
                     self.cardsOnScreen.append(Card(self, "blank", 55 * (i % 18) - 485, 0 - (80 * (i // 18) - 248) if o == 1 else 95 * (i // 18) - 240))
             
-            for i in images: # Load image files
+            for i in images:
                 self.screen.addshape("unoSprites/" + i)
             
-            # Object used for writing the numbers
             self.numberer = Turtle()
             self.numberer.pu()
             self.numberer.ht()
@@ -99,7 +97,15 @@ class Deck:
         self.currentCard = self.drawCard() # Sets the first card on the deck at the start of the game
         
         if self.currentCard.split(" ")[0] == "any": # If its a wild or draw 4, it chooses a random color
+                                                    # It first starts as a random color but it goes through
+                                                    # the conputer's deck and if there is a colored card in it
+                                                    # it will choose that color. Because of how it is made, it chooses
+                                                    # the last colored card in the deck to be the color.
             self.customColor = choice(self.deckAvailable["colors"])
+            for i in self.computerDeck:
+                if i.split(" ")[0] in self.deckAvailable["colors"]:
+                    self.customColor = i.split(" ")[0]
+
         else: # If its not, the custom color is set to False
             self.customColor = False
         
@@ -179,13 +185,12 @@ class Deck:
             for i in range(len(self.computerDeck)): # Render the computer's cards
                 self.cardsOnScreen[i + 107].updateImage("uno back")
             
-            # Changes background color for draw 4s and wilds so you know what color to play
             if self.customColor == "red":
-                self.screen.bgcolor("#553333")
+                self.screen.bgcolor("#552222")
             elif self.customColor == "yellow":
-                self.screen.bgcolor("#555533")
+                self.screen.bgcolor("#555522")
             elif self.customColor == "green":
-                self.screen.bgcolor("#335533")
+                self.screen.bgcolor("#225522")
             elif self.customColor == "blue":
                 self.screen.bgcolor("#333355")
             else:
