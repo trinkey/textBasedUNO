@@ -92,19 +92,13 @@ class Deck:
             ],
             "colors": ("red", "yellow", "green", "blue")
         }
+        conputerDeck = ["any wild", "any wild", "any wild", "blue 1", "green 4"]
         shuffle(self.deckAvailable["cards"]) # Shuffles the deck
         
         self.currentCard = self.drawCard() # Sets the first card on the deck at the start of the game
         
         if self.currentCard.split(" ")[0] == "any": # If its a wild or draw 4, it chooses a random color
-                                                    # It first starts as a random color but it goes through
-                                                    # the conputer's deck and if there is a colored card in it
-                                                    # it will choose that color. Because of how it is made, it chooses
-                                                    # the last colored card in the deck to be the color.
             self.customColor = choice(self.deckAvailable["colors"])
-            for i in self.computerDeck:
-                if i.split(" ")[0] in self.deckAvailable["colors"]:
-                    self.customColor = i.split(" ")[0]
 
         else: # If its not, the custom color is set to False
             self.customColor = False
@@ -135,7 +129,15 @@ class Deck:
                     newColor = input("Enter a number, 1-4, of which color you want to make it.\n(1 = red, 2 = yellow, 3 = green, 4 = blue)\n")
                 self.customColor = self.deckAvailable["colors"][int(newColor) - 1]
             else:
-                self.customColor = choice(self.deckAvailable["colors"])
+                self.customColor = choice(self.deckAvailable["colors"]) # Chooses a color for the computer when it plays a wild or draw 4
+                                                                        # It first starts as a random color but it goes through
+                                                                        # the conputer's deck and if there is a colored card in it
+                                                                        # it will choose that color. Because of how it is made, it chooses
+                                                                        # the last colored card in the deck to be the color.
+                
+                for i in self.computerDeck: # Picks a random color from the computer's deck
+                    if i.split(" ")[0] in self.deckAvailable["colors"]:
+                        self.customColor = i.split(" ")[0]
     
     def getNewDeck(self, amount): # Returns a new deck with x amount of cards
         shuffle(self.deckAvailable["cards"])
