@@ -13,7 +13,20 @@ turn = 0 # 1 if whoStarts == "computer" else 0
 
 class Deck:
     def __init__(self, ug): # Creates all variables needed.
-        if ug:
+        self.useGraphics = ug
+        self.currentCard = ""
+        self.customColor = False
+        self.playerDeck = []
+        self.computerDeck = []
+        self.deckAvailable = {}
+        
+        if self.useGraphics:
+            self.cardsOnScreen = []
+            self.screen = Screen()
+            self.screen.setup(1024, 576)
+            self.screen.tracer(0)
+            self.screen.bgcolor("#443344")
+            
             from turtle import Screen, Turtle
             class Card:
                 def __init__(self, deckObject, image = "blank", posx = 0, posy = 0): # Takes 1 required arguments, 3 optional arguments
@@ -44,26 +57,13 @@ class Deck:
                         self.turtle.st()
                         self.turtle.shape("unoSprites/" + image + ".gif") # Updates visible image
         
-        images = [ # Images used for sprites
-            "red 0.gif", "red 1.gif", "red 2.gif", "red 3.gif", "red 4.gif", "red 5.gif", "red 6.gif", "red 7.gif", "red 8.gif", "red 9.gif", "red skip.gif", "red reverse.gif", "red draw 2.gif",
-            "yellow 0.gif", "yellow 1.gif", "yellow 2.gif", "yellow 3.gif", "yellow 4.gif", "yellow 5.gif", "yellow 6.gif", "yellow 7.gif", "yellow 8.gif", "yellow 9.gif", "yellow skip.gif", "yellow reverse.gif", "yellow draw 2.gif",
-            "green 0.gif", "green 1.gif", "green 2.gif", "green 3.gif", "green 4.gif", "green 5.gif", "green 6.gif", "green 7.gif", "green 8.gif", "green 9.gif", "green skip.gif", "green reverse.gif", "green draw 2.gif",
-            "blue 0.gif", "blue 1.gif", "blue 2.gif", "blue 3.gif", "blue 4.gif", "blue 5.gif", "blue 6.gif", "blue 7.gif", "blue 8.gif", "blue 9.gif", "blue skip.gif", "blue reverse.gif", "blue draw 2.gif",
-            "any draw 4.gif", "any wild.gif", "uno back.gif"
-        ]
-        self.useGraphics = ug
-        self.currentCard = ""
-        self.customColor = False
-        self.playerDeck = []
-        self.computerDeck = []
-        self.deckAvailable = {}
-        
-        if self.useGraphics:
-            self.cardsOnScreen = []
-            self.screen = Screen()
-            self.screen.setup(1024, 576)
-            self.screen.tracer(0)
-            self.screen.bgcolor("#443344")
+            images = [ # Images used for sprites
+                "red 0.gif", "red 1.gif", "red 2.gif", "red 3.gif", "red 4.gif", "red 5.gif", "red 6.gif", "red 7.gif", "red 8.gif", "red 9.gif", "red skip.gif", "red reverse.gif", "red draw 2.gif",
+                "yellow 0.gif", "yellow 1.gif", "yellow 2.gif", "yellow 3.gif", "yellow 4.gif", "yellow 5.gif", "yellow 6.gif", "yellow 7.gif", "yellow 8.gif", "yellow 9.gif", "yellow skip.gif", "yellow reverse.gif", "yellow draw 2.gif",
+                "green 0.gif", "green 1.gif", "green 2.gif", "green 3.gif", "green 4.gif", "green 5.gif", "green 6.gif", "green 7.gif", "green 8.gif", "green 9.gif", "green skip.gif", "green reverse.gif", "green draw 2.gif",
+                "blue 0.gif", "blue 1.gif", "blue 2.gif", "blue 3.gif", "blue 4.gif", "blue 5.gif", "blue 6.gif", "blue 7.gif", "blue 8.gif", "blue 9.gif", "blue skip.gif", "blue reverse.gif", "blue draw 2.gif",
+                "any draw 4.gif", "any wild.gif", "uno back.gif"
+            ]
             
             for o in range(2):
                 for i in range(107):
