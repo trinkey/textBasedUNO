@@ -1,6 +1,6 @@
 # Scuffed online version: https://trinkey.trinket.io/sites/uno
 
-# Todo - add an option to try to play a drawed card the turn you draw it
+# Todo - add a way to click a card to play it
 # Bugs - none known
 
 from random import shuffle, choice
@@ -231,6 +231,11 @@ class Deck:
                         card = int(input("Enter which card you want to play! (0 to draw)\n")) - 1
                         if card == -1: # If input is 0, draw card
                             self.playerDeck.append(self.drawCard())
+                            if self.checkIfValidPlay(self.playerDeck[-1]):
+                                self.updateVisibleDeck()
+                                if input("Would you like to play the card you just got?\nType anything if you would, or just press enter.\nEnter here: "):
+                                    self.playCard(self.playerDeck[-1], turn, replenishDeck)
+                                    self.playerDeck.pop(-1)
                             turn = 1
                             checkIfTeamModify = False
                             self.updateVisibleDeck()
@@ -276,6 +281,9 @@ class Deck:
                 
                 if turn: # If no valid plays, it draws a card.
                     self.computerDeck.append(self.drawCard())
+                    if self.checkIfValidPlay(self.computerDeck[-1]):
+                        self.playCard(self.computerDeck[-1], turn, replenishDeck)
+                        self.computerDeck.pop(-1)
                     turn = 0
                     checkIfTeamModify = False
                     self.updateVisibleDeck()
