@@ -236,8 +236,13 @@ class Deck:
                                 if input("Would you like to play the card you just got?\nType anything if you would, or just press enter.\nEnter here: "):
                                     self.playCard(self.playerDeck[-1], turn, replenishDeck)
                                     self.playerDeck.pop(-1)
+                                    checkIfTeamModify = True
+                                else:
+                                    checkIfTeamModify = False
+                            else:
+                                checkIfTeamModify = False
+                            
                             turn = 1
-                            checkIfTeamModify = False
                             self.updateVisibleDeck()
                         
                         elif self.checkIfValidPlay(self.playerDeck[card]): # If the play is valid, play card
@@ -284,8 +289,11 @@ class Deck:
                     if self.checkIfValidPlay(self.computerDeck[-1]):
                         self.playCard(self.computerDeck[-1], turn, replenishDeck)
                         self.computerDeck.pop(-1)
+                        checkIfTeamModify = True
+                    else:
+                        checkIfTeamModify = False
+                    
                     turn = 0
-                    checkIfTeamModify = False
                     self.updateVisibleDeck()
             else:
                 print("There aren't any cards left in the deck!")
