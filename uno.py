@@ -1,3 +1,5 @@
+# Scuffed online version: https://trinkey.trinket.io/sites/uno
+
 # Todo - add an option to try to play a drawed card the turn you draw it
 # Bugs - none known
 
