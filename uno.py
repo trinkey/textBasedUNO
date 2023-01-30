@@ -21,13 +21,14 @@ class Deck:
         self.deckAvailable = {}
         
         if self.useGraphics:
+            from turtle import Screen, Turtle
+            
             self.cardsOnScreen = []
             self.screen = Screen()
             self.screen.setup(1024, 576)
             self.screen.tracer(0)
             self.screen.bgcolor("#443344")
             
-            from turtle import Screen, Turtle
             class Card:
                 def __init__(self, deckObject, image = "blank", posx = 0, posy = 0): # Takes 1 required arguments, 3 optional arguments
                     # deckObject -> class
